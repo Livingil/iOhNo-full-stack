@@ -1,0 +1,78 @@
+.NotePageInfo {
+	margin: 20px;
+}
+
+.NotePageInfo input {
+	font-size: 32px;
+	width: 80%;
+	margin: 10px auto;
+	text-align: center;
+	background: transparent;
+	font-family: sans-serif;
+	border: none;
+	color: #fff;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.creationAt {
+	display: flex;
+	color: gray;
+}
+
+.content {
+	white-space: pre-line;
+}
+
+.buttons {
+	display: flex;
+}
+
+.buttonSave:hover,
+.buttonTrash:hover {
+	cursor: pointer;
+	color: #007bff;
+}
+
+.disabled {
+	pointer-events: none;
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 350px;
+}
+
+.NoteContent,
+.NoteTitle {
+	background: transparent;
+	font-family: sans-serif;
+	color: #fff;
+	resize: none;
+}
+
+.NoteTitle {
+	font-size: 32px;
+	border-width: 0px;
+	height: 50px;
+	width: 100%;
+	text-align: center;
+}
+
+.NoteContent {
+	height: 100%;
+	font-size: 16px;
+	border-width: 0px;
+}
+
+.NoteContent:focus,
+.NoteTitle:focus {
+	outline: none;
+}

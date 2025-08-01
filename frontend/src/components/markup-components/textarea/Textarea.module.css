@@ -1,0 +1,28 @@
+.NoteContent,
+.NoteTitle {
+	background: transparent;
+	font-family: sans-serif;
+	color: #fff;
+	resize: none;
+}
+
+.NoteTitle {
+	font-size: 32px;
+	border-width: 0px;
+	height: auto;
+	padding: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.NoteContent {
+	height: 100%;
+	font-size: 16px;
+	border-width: 0px;
+	padding-top: 10px;
+}
+
+.NoteContent:focus,
+.NoteTitle:focus {
+	outline: none;
+}

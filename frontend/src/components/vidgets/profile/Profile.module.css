@@ -1,0 +1,46 @@
+.Profile {
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(255, 255, 255, 0.1);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	width: 220px;
+	height: 220px;
+	font-family: sans-serif;
+	color: #fff;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
+	padding: 20px;
+}
+
+.Profile:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.infoPanel {
+	display: flex;
+	flex-direction: column;
+	top: 0;
+}
+
+.infoPanel h1 {
+	margin: 0;
+}
+
+.infoPanel div {
+	font-size: 16px;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+.logo {
+	font-size: 100px;
+	width: 120px;
+	height: 120px;
+	border-radius: 50%;
+	object-fit: cover;
+	align-self: flex-start;
+}

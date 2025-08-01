@@ -1,0 +1,9 @@
+.Input {
+	width: auto;
+	margin: auto;
+	background: transparent;
+	font-size: 16px;
+	padding: 5px;
+	color: #fff;
+	outline: none;
+}

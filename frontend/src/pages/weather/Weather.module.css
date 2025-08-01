@@ -1,0 +1,53 @@
+.weatherContainer {
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(28, 28, 30, 0.6);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	font-family: 'Segoe UI', system-ui, sans-serif;
+	color: #fff;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	padding: 20px;
+}
+
+.title {
+	display: flex;
+	font-size: 24px;
+	font-weight: 600;
+	margin-bottom: 10px;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	width: 100%;
+}
+
+.weatherGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 12px;
+	margin-top: 15px;
+}
+
+.weatherItem {
+	display: flex;
+	flex-direction: column;
+	backdrop-filter: blur(5px);
+	background-color: rgba(255, 255, 255, 0.05);
+	border-radius: 10px;
+	padding: 10px 12px;
+	transition: all 0.2s ease;
+}
+
+.weatherLabel {
+	font-size: 12px;
+	opacity: 0.8;
+	margin-bottom: 4px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.weatherValue {
+	font-size: 16px;
+	font-weight: 500;
+}

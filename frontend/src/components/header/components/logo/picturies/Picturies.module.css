@@ -1,0 +1,16 @@
+.IconContainer {
+	position: relative;
+}
+
+.IconTop {
+	font-size: 15px;
+	top: 5px;
+	margin: 9px;
+}
+
+.IconBack {
+	font-size: 35px;
+	position: absolute;
+	top: 2px;
+	color: red;
+}

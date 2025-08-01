@@ -1,0 +1,21 @@
+.Content {
+	display: flex;
+	margin: auto;
+	flex-direction: column;
+	background-color: rgb(28, 28, 30, 0.6);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	width: 300px;
+	padding: 20px;
+	font-family: sans-serif;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	text-align: center;
+	color: red;
+}
+
+.link {
+	display: flex;
+	justify-content: space-between;
+	color: #fff;
+}

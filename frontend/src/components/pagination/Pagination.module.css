@@ -1,0 +1,9 @@
+.Pagination {
+	display: flex;
+	width: 80%;
+	margin: auto;
+}
+
+.currentPage {
+	margin: auto;
+}

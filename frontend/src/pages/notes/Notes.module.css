@@ -1,0 +1,11 @@
+.NotesPage {
+	display: flex;
+	width: 100%;
+	flex-direction: row;
+}
+
+.notesList {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+}

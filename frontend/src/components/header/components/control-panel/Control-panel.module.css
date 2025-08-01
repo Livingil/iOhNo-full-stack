@@ -1,0 +1,32 @@
+.ControlPanel {
+	display: flex;
+	flex-direction: column;
+	padding: 0 10px;
+}
+
+.profil {
+	display: inline-flex;
+}
+
+.userLogo {
+	display: flex;
+	justify-content: end;
+}
+
+.buttonsPanel {
+	display: flex;
+	flex-direction: row;
+	justify-content: end;
+}
+
+.logout:hover,
+.buttonsPanel:hover {
+	cursor: pointer;
+}
+
+.button:hover,
+.logout:hover,
+.profil:hover {
+	color: #007bff;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

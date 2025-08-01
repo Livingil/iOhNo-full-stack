@@ -1,0 +1,50 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	margin-left: 10px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	border-radius: 15px;
+	width: 100%;
+	background-color: rgb(28, 28, 30, 0.6);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	font-family: sans-serif;
+	backdrop-filter: blur(10px);
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
+	padding: 20px;
+	margin-bottom: 0;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.saveIcon {
+	display: flex;
+	background: transparent;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	color: #fff;
+	font-size: 18px;
+	padding: 0;
+	margin: 0;
+}
+
+.saveIcon :hover {
+	color: #007bff;
+}
+
+.buttonSave:hover {
+	cursor: pointer;
+	color: #007bff;
+}
+
+.disabled {
+	pointer-events: none;
+	opacity: 0.5;
+	cursor: not-allowed;
+}

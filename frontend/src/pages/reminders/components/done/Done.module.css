@@ -1,0 +1,35 @@
+.DonePage {
+	margin: 20px;
+}
+
+.table {
+	width: 80%;
+	margin: auto;
+	padding: 20px;
+	backdrop-filter: blur(10px);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
+}
+
+.tableHeader {
+	display: flex;
+	justify-content: flex-end;
+	width: 80%;
+	margin: auto;
+	padding: 20px;
+	backdrop-filter: blur(10px);
+}
+
+.loginColumn {
+	width: 30%;
+}
+.regAtColumn {
+	width: 40%;
+}
+.roleColumn {
+	width: 30%;
+}

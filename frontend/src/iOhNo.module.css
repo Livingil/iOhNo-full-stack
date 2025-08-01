@@ -1,0 +1,20 @@
+.iOhNo {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	min-height: 100%;
+	color: aliceblue;
+	background-image: url('https://thecommunity.ru/uploads/posts/2021-06/1623781104_img19.jpg');
+	background-size: cover;
+	height: auto;
+	width: auto;
+	margin: 0 auto;
+}
+
+.iOhNo h2 {
+	text-align: center;
+}
+
+.content {
+	padding: 120px;
+}

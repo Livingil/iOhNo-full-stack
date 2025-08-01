@@ -1,0 +1,15 @@
+.Temperature {
+	font-size: 16px;
+	color: rgba(255, 255, 255, 0.8);
+}
+
+.degrees {
+	display: flex;
+	font-size: 60px;
+	margin-top: 20px;
+}
+
+.celsius {
+	margin-top: 10px;
+	font-size: 12px;
+}

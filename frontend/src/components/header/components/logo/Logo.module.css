@@ -1,0 +1,27 @@
+.Logo {
+	display: flex;
+	flex-direction: row;
+	padding: 0 15px;
+	align-items: center;
+	font-weight: bold;
+}
+.picturiesText {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+.breadcrumbs {
+	font-size: 14px;
+	margin-left: 5px;
+	color: #555;
+}
+
+.breadcrumbs a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+	color: #fff;
+}

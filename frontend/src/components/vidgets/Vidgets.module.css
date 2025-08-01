@@ -1,0 +1,46 @@
+.Vidgets {
+	display: flex;
+	flex-direction: column;
+	/* justify-content: space-between; */
+	background-color: rgb(28, 28, 30, 0.6);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	width: 490px;
+	height: 220px;
+	font-family: sans-serif;
+	color: #fff;
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	cursor: pointer;
+}
+
+.Vidgets:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.noteRow {
+	display: flex;
+	justify-content: space-between;
+	width: 95%;
+	margin: 2px auto;
+	padding: 2px 10px;
+	align-items: center;
+	backdrop-filter: blur(10px);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	cursor: pointer;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.noteRow:hover {
+	transform: translateY(-2px);
+}
+
+.dev {
+	margin: auto;
+}

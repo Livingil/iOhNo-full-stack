@@ -1,0 +1,9 @@
+.HomePage {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	position: relative;
+	gap: 50px;
+	justify-content: center;
+}
