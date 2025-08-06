@@ -7,7 +7,7 @@ export const Reminders = () => {
 	return (
 		<div onClick={handleClick} className={styles.Vidgets}>
 			<HeaderReminder />
-			<span className={styles.dev}>!in development!</span>
+			<span className={styles.dev}>in development</span>
 		</div>
 	);
 };

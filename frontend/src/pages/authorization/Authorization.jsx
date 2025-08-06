@@ -33,10 +33,10 @@ export const Authorization = () => {
 
 	useResetForm(reset);
 
-	const onSubmit = ({ login, password }) => {
+	const onSubmit = async ({ login, password }) => {
 		setIsLocalLoading(true);
 		try {
-			request('/login', 'POST', { login, password }).then(({ error, user }) => {
+			await request('/login', 'POST', { login, password }).then(({ error, user }) => {
 				if (error) {
 					setServerError(`Request Error: ${error}`);
 
@@ -46,6 +46,8 @@ export const Authorization = () => {
 				dispatch(setUser(user));
 				sessionStorage.setItem('userData', JSON.stringify(user));
 			});
+		} catch (e) {
+			setServerError(`Error connect: ${e.message || 'Unknown error'}`);
 		} finally {
 			setIsLocalLoading(false);
 		}

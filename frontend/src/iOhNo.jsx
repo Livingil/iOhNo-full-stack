@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorContent, Footer, Header, Loader } from './components';
 import { setNotes, setUser } from './redux/actions';
-import { selectUser, selectUserHash } from './redux/selectors';
+import { selectUser } from './redux/selectors';
 import { ROLE } from './constans';
 import { checkAccess, request } from './utils';
 import styles from './iOhNo.module.css';
@@ -16,7 +16,6 @@ export const IOhNo = () => {
 	const dispatch = useDispatch();
 
 	const user = useSelector(selectUser);
-	const hash = useSelector(selectUserHash);
 
 	useLayoutEffect(() => {
 		const currentUserDataJSON = sessionStorage.getItem('userData');
@@ -40,7 +39,7 @@ export const IOhNo = () => {
 			setErrorMessage(error);
 			setIsLocalLoading(false);
 		});
-	}, [dispatch, user.roleId, hash]);
+	}, [dispatch, user.roleId]);
 
 	return (
 		<div className={styles.iOhNo}>

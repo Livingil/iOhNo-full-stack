@@ -2,7 +2,6 @@ export * from './action-type';
 export * from './user/user-logout';
 export * from './user/set-user';
 export * from './user/set-load-user';
-export * from './flags/set-is-loading';
 export * from './flags/set-trigger-new-note';
 export * from './note/set-note';
 export * from './note/delete-note';

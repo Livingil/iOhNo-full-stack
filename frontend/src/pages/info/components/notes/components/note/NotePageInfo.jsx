@@ -10,7 +10,7 @@ import { formatDate } from '../../../../../../utils';
 import styles from './NotePageInfo.module.css';
 
 export const NotePageInfo = () => {
-	const [error, setError] = useState(true);
+	const [error, setError] = useState(null);
 
 	const params = useParams();
 	const dispatch = useDispatch();

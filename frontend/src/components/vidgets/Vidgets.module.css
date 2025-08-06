@@ -1,7 +1,6 @@
 .Vidgets {
 	display: flex;
 	flex-direction: column;
-	/* justify-content: space-between; */
 	background-color: rgb(28, 28, 30, 0.6);
 	border-radius: 15px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -12,6 +11,9 @@
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255, 255, 255, 0.2);
 	cursor: pointer;
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
 }
 
 .Vidgets:hover {

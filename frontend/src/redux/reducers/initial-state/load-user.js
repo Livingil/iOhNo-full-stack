@@ -5,5 +5,4 @@ export const initialStateLoadUser = {
 	login: null,
 	registeredAt: null,
 	roleId: ROLE.GUEST,
-	hash: null,
 };
