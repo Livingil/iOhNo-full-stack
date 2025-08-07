@@ -57,7 +57,7 @@ export const UserRow = ({ user, roles, onUserRemove }) => {
 						onClick={(e) => {
 							e.preventDefault();
 							e.stopPropagation();
-							onUserRemove();
+							onUserRemove(user.id, user.login);
 						}}
 					/>
 				</div>

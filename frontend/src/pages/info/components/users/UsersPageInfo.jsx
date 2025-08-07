@@ -4,7 +4,7 @@ import { UserRow } from './components';
 import { PAGINATION_LIMIT, ROLE } from '../../../../constans';
 import { H2 } from '../../../../components/markup-components';
 import { ErrorContent, Loader, Pagination, Search } from '../../../../components';
-import { checkAccess, debounce, request } from '../../../../utils';
+import { checkAccess, confirmed, debounce, request } from '../../../../utils';
 import { selectUser } from '../../../../redux/selectors';
 import styles from './UsersPageInfo.module.css';
 
@@ -48,18 +48,20 @@ export const UsersPageInfo = () => {
 		});
 	}, [shouldUpdateUserList, page, user.roleId, shouldSearch]);
 
-	const onUserRemove = (userId) => {
+	const onUserRemove = (userId, userLogin) => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
 			return;
 		}
-		request(`/users/${userId}`, 'DELETE').then(() => {
-			setShouldUpdateUserList(!shouldUpdateUserList);
-		});
-		const updatedUsers = users.filter((note) => note.id !== userId);
+		if (confirmed(`user: ${userLogin}`)) {
+			request(`/users/${userId}`, 'DELETE').then(() => {
+				setShouldUpdateUserList(!shouldUpdateUserList);
+			});
+			const updatedUsers = users.filter((note) => note.id !== userId);
 
-		if (updatedUsers.length === 0 && page > 1) {
-			setPage(page - 1);
-			return;
+			if (updatedUsers.length === 0 && page > 1) {
+				setPage(page - 1);
+				return;
+			}
 		}
 	};
 
@@ -94,7 +96,7 @@ export const UsersPageInfo = () => {
 									key={user.id}
 									user={user}
 									roles={roles.filter((role) => role.id !== ROLE.GUEST)}
-									onUserRemove={() => onUserRemove(user.id)}
+									onUserRemove={onUserRemove}
 								/>
 							))}
 							{lastPage > 1 && users.length > 0 && (

@@ -1,0 +1,3 @@
+export const initialStateReminders = {
+	reminders: [],
+};

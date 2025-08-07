@@ -6,6 +6,7 @@ export * from './flags/set-trigger-new-note';
 export * from './note/set-note';
 export * from './note/delete-note';
 export * from './notes/set-notes';
+export * from './reminders/set-reminders';
 export * from './async-action/note/load-note';
 export * from './async-action/note/save-note';
 export * from './async-action/note/remove-note';

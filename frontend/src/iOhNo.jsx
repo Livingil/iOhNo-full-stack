@@ -2,7 +2,7 @@ import { Routs } from './routs/Routs';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ErrorContent, Footer, Header, Loader } from './components';
-import { setNotes, setUser } from './redux/actions';
+import { setNotes, setReminders, setUser } from './redux/actions';
 import { selectUser } from './redux/selectors';
 import { ROLE } from './constans';
 import { checkAccess, request } from './utils';
@@ -10,11 +10,9 @@ import styles from './iOhNo.module.css';
 
 export const IOhNo = () => {
 	const [errorMessage, setErrorMessage] = useState(null);
-
 	const [isLocalLoading, setIsLocalLoading] = useState(true);
 
 	const dispatch = useDispatch();
-
 	const user = useSelector(selectUser);
 
 	useLayoutEffect(() => {
@@ -34,11 +32,14 @@ export const IOhNo = () => {
 			return;
 		}
 
-		request('/notes').then(({ error, data: notes }) => {
-			dispatch(setNotes(notes));
-			setErrorMessage(error);
-			setIsLocalLoading(false);
-		});
+		Promise.all([request('/notes'), request('/reminders')]).then(
+			([{ error: errorNotes, data: dataNotes }, { error: errorReminders, data: dataReminders }]) => {
+				dispatch(setNotes(dataNotes));
+				dispatch(setReminders(dataReminders));
+				setErrorMessage(errorNotes || errorReminders);
+				setIsLocalLoading(false);
+			},
+		);
 	}, [dispatch, user.roleId]);
 
 	return (

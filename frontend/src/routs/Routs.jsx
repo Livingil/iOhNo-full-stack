@@ -39,7 +39,7 @@ export const Routs = () => {
 			<Route path="/vidgets" element={<div>Vidgets in development</div>} />
 			<Route path="/calendar" element={<div>Сalendar in development</div>} />
 
-			<Route path="*" element={<ErrorContent serverError={ERROR.PAGE_NOT_EXIST} />} />
+			<Route path="*" element={<ErrorContent error={ERROR.PAGE_NOT_EXIST} />} />
 		</Routes>
 	);
 };

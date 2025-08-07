@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from '../../../../components';
 import { removeNote, setNote } from '../../../../redux/actions';
 import { selectNotes } from '../../../../redux/selectors';
-import { formatDate } from '../../../../utils';
+import { confirmed, formatDate } from '../../../../utils';
 import { PROP_TYPE } from '../../../../constans';
 import styles from './Notes-list.module.css';
 
@@ -18,9 +18,12 @@ export const NotesList = ({ searchNotes }) => {
 	};
 
 	const handleClickDelete = (id, event) => {
-		event.preventDefault();
-		event.stopPropagation();
-		dispatch(removeNote(id));
+		if (confirmed('note')) {
+			event.preventDefault();
+			event.stopPropagation();
+			dispatch(removeNote(id));
+		}
+		return;
 	};
 
 	const currentNotesList = searchNotes || notes || [];

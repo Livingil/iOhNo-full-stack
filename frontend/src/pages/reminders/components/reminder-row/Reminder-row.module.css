@@ -1,0 +1,56 @@
+.row {
+	display: flex;
+	justify-content: center;
+}
+
+.tableRow {
+	display: flex;
+	width: 80%;
+	margin: 10px 0;
+	padding: 20px;
+	align-items: center;
+	backdrop-filter: blur(10px);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
+	cursor: pointer;
+}
+
+.tableRow:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.titleColumn {
+	width: 40%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.contentColumn {
+	width: 30%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.pubAtColumn {
+	width: 30%;
+	text-align: end;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.buttonTrash {
+	margin: 30px 0;
+	cursor: pointer;
+}
+
+.buttonTrash:hover {
+	color: #007bff;
+}

@@ -7,7 +7,7 @@ import { ERROR, PROP_TYPE } from '../../constans';
 import { checkAccess } from '../../utils';
 import styles from './Error-content.module.css';
 
-export const ErrorContent = ({ children, access, serverError = null }) => {
+export const ErrorContent = ({ children, access, error = null }) => {
 	const user = useSelector(selectUser);
 	let accessError;
 
@@ -15,12 +15,12 @@ export const ErrorContent = ({ children, access, serverError = null }) => {
 		accessError = checkAccess(access, user.roleId) ? null : ERROR.ACCESS_DENIED;
 	}
 
-	const error = serverError || accessError;
+	const errorComponent = error || accessError;
 
-	return error ? (
+	return errorComponent ? (
 		<div className={styles.Content}>
 			<H2> Error: </H2>
-			<div>{error}</div>
+			<div>{errorComponent}</div>
 			<br></br>
 			<br></br>
 			<div className={styles.link}>
@@ -36,5 +36,5 @@ export const ErrorContent = ({ children, access, serverError = null }) => {
 ErrorContent.propTypes = {
 	children: PropTypes.node.isRequired,
 	access: PropTypes.arrayOf(PROP_TYPE.ROLE).isRequired,
-	serverError: PROP_TYPE.ERROR,
+	error: PROP_TYPE.ERROR,
 };

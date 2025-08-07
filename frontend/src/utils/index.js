@@ -5,3 +5,4 @@ export * from './check-access.js';
 export * from './request.js';
 export * from './format-date.js';
 export * from './get-role-name.js';
+export * from './confirm-delete.js';

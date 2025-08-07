@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { City, Temperature, Sky } from './components';
 import { setWeather } from '../../../redux/actions';
 import { Loader } from '../../loader/Loader';
+import { request } from '../../../utils';
+import { ErrorContent } from '../../Error-content/Error-content';
 import styles from './Weather.module.css';
 
 export const Weather = () => {
@@ -12,35 +14,35 @@ export const Weather = () => {
 	const [weather, setWeath] = useState('');
 	const [weatherSky, setWeatherSky] = useState('');
 	const [isLocalLoading, setIsLocalLoading] = useState(true);
+	const [serverError, setServerError] = useState(null);
 
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		fetch(
-			'https://api.openweathermap.org/data/2.5/weather?q=Severodvinsk&units=metric&lang=ru&appid=592b40a32ebbb356bcabefd39ea0802f',
-		)
-			.then((res) => res.json())
-			.then((data) => {
-				dispatch(setWeather(data));
-				setCiy(data.name);
-				setTemperature(Math.round(data.main.temp));
-				setWeath(data.weather[0].description);
-				setWeatherSky(data.weather[0].id);
-				setIsLocalLoading(false);
-			});
+		request('/weather').then(({ error, data }) => {
+			setServerError(error);
+			dispatch(setWeather(data));
+			setCiy(data.name);
+			setTemperature(Math.round(data.main.temp));
+			setWeath(data.weather[0].description);
+			setWeatherSky(data.weather[0].id);
+			setIsLocalLoading(false);
+		});
 	}, [dispatch]);
 
 	return (
-		<Link to="/weather" className={styles.WeatherContainer}>
-			{isLocalLoading ? (
-				<Loader />
-			) : (
-				<div>
-					<City city={city} />
-					<Temperature temperature={temperature} />
-				</div>
-			)}
-			<Sky weather={weather} weatherSky={weatherSky} />
-		</Link>
+		<ErrorContent error={serverError}>
+			<Link to="/weather" className={styles.WeatherContainer}>
+				{isLocalLoading ? (
+					<Loader />
+				) : (
+					<div>
+						<City city={city} />
+						<Temperature temperature={temperature} />
+					</div>
+				)}
+				<Sky weather={weather} weatherSky={weatherSky} />
+			</Link>
+		</ErrorContent>
 	);
 };

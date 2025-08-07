@@ -6,7 +6,7 @@ import { loadNote, removeNote, saveNote } from '../../../../../../redux/actions'
 import { selectNote, selectUser } from '../../../../../../redux/selectors';
 import { Textarea } from '../../../../../../components/markup-components';
 import { ROLE } from '../../../../../../constans';
-import { formatDate } from '../../../../../../utils';
+import { confirmed, formatDate } from '../../../../../../utils';
 import styles from './NotePageInfo.module.css';
 
 export const NotePageInfo = () => {
@@ -50,7 +50,10 @@ export const NotePageInfo = () => {
 	};
 
 	const onNoteRemove = () => {
-		dispatch(removeNote(note.id)).then(() => navigate(-1));
+		if (confirmed('note')) {
+			dispatch(removeNote(note.id)).then(() => navigate(-1));
+		}
+		return;
 	};
 
 	if (isLocalLoading) {
