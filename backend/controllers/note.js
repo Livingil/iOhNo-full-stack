@@ -40,18 +40,16 @@ async function getNotesForUser(userId) {
   return notes;
 }
 
-async function getNotes(search = "", limit = 10, page = 1) {
+async function getNotes(search = "", limit = 10, page = 1, sortOrder = "asc") {
+  const order = sortOrder === "asc" ? 1 : -1;
+
   const [notes, count] = await Promise.all([
     Note.find({ title: { $regex: search, $options: "i" } })
       .limit(limit)
       .skip((page - 1) * limit)
-      .sort({ createdAt: -1 }),
+      .sort({ createdAt: order }),
     Note.countDocuments({ title: { $regex: search, $options: "i" } }),
   ]);
-
-  if (!notes || !count) {
-    throw new Error("Error load data");
-  }
 
   return {
     notes: notes,
@@ -67,10 +65,10 @@ function getNote(id) {
 }
 
 module.exports = {
-  addNote: addNote,
-  editNote: editNote,
-  deleteNote: deleteNote,
-  getNotes: getNotes,
-  getNote: getNote,
-  getNotesForUser: getNotesForUser,
+  addNote,
+  editNote,
+  deleteNote,
+  getNotes,
+  getNote,
+  getNotesForUser,
 };

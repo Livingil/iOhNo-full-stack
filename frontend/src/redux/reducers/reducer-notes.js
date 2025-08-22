@@ -8,8 +8,14 @@ export const reducerNotes = (state = initialStateNotes, action) => {
 		case ACTION_TYPE.SET_NOTES: {
 			return { ...state, notes: payload };
 		}
+		case ACTION_TYPE.SET_ALL_NOTES: {
+			return { ...state, allNotes: payload };
+		}
 		case ACTION_TYPE.DELETE_NOTE: {
 			return { ...state, notes: state.notes.filter((note) => note.id !== payload) };
+		}
+		case ACTION_TYPE.DELETE_NOTE_FROM_ALL_NOTES: {
+			return { ...state, allNotes: state.allNotes.notes.filter((note) => note.id !== payload), ...state };
 		}
 		case ACTION_TYPE.LOGOUT: {
 			return initialStateNotes;

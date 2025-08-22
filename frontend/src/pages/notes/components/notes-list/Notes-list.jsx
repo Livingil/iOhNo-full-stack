@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Icon } from '../../../../components';
-import { removeNote, setNote } from '../../../../redux/actions';
+import { deleteNote, removeNote, setNote } from '../../../../redux/actions';
 import { selectNotes } from '../../../../redux/selectors';
 import { confirmed, formatDate } from '../../../../utils';
 import { PROP_TYPE } from '../../../../constans';
@@ -21,7 +21,7 @@ export const NotesList = ({ searchNotes }) => {
 		if (confirmed('note')) {
 			event.preventDefault();
 			event.stopPropagation();
-			dispatch(removeNote(id));
+			dispatch(removeNote(id, deleteNote));
 		}
 		return;
 	};

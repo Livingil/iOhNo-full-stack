@@ -16,11 +16,9 @@ const router = express.Router({ mergeParams: true });
 
 router.get("/", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
   try {
-    const { users, lastPage } = await getUsers(
-      req.query.search,
-      req.query.limit,
-      req.query.page
-    );
+    const { search, limit, page, sortOrder } = req.query;
+
+    const { users, lastPage } = await getUsers(search, limit, page, sortOrder);
 
     res.send({ error: null, data: { lastPage, users: users.map(mapUser) } });
   } catch (e) {
@@ -35,7 +33,6 @@ router.get(
   async (req, res) => {
     try {
       const users = await getUsersForAllNotes();
-
       res.send({ error: null, data: users.map(mapUser) });
     } catch (e) {
       res.send({ error: e.message || "Unknown error" });
@@ -76,6 +73,7 @@ router.patch(
     try {
       const newUser = await updateUser(req.params.id, {
         role_id: req.body.roleId,
+        city: req.body.city,
         image_url: req.body.image_url,
       });
 

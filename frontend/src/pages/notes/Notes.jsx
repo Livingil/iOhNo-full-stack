@@ -1,25 +1,40 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useCallback, useEffect, useState } from 'react';
 import { NotesList, NoteContent } from './components';
-import { selectNotes, selectTriggerNewNote, selectUser } from '../../redux/selectors';
-import { setNote, setNotes, setTriggerNewNote } from '../../redux/actions';
-import { dateNow } from '../../utils';
+import {
+	selectErrorNotes,
+	selectIsLoadingNotes,
+	selectNotes,
+	selectTriggerNewNote,
+	selectUser,
+} from '../../redux/selectors';
+import { setErrorNotes, setNote, setNotes, setTriggerNewNote, thunk } from '../../redux/actions';
+import { checkAccess, dateNow } from '../../utils';
 import { ErrorContent, Loader, Search } from '../../components';
 import { Button } from '../../components/markup-components';
 import { ROLE } from '../../constans';
+import { setIsLoadingNotes } from '../../redux/actions/flags/set-is-loading-notes';
 import styles from './Notes.module.css';
 
 export const NotesPage = () => {
 	const [flagNewNoteButton, setFlagNewNoteButton] = useState(true);
 	const [searchPhrase, setSearchPhrase] = useState('');
-	const [isLocalLoading, setIsLocalLoading] = useState(true);
-
-	const notes = useSelector(selectNotes);
-	const user = useSelector(selectUser);
-
-	const triggerNewNoteFlag = useSelector(selectTriggerNewNote);
 
 	const dispatch = useDispatch();
+
+	const isLocalLoading = useSelector(selectIsLoadingNotes);
+	const errorMessage = useSelector(selectErrorNotes);
+	const notes = useSelector(selectNotes);
+	const user = useSelector(selectUser);
+	const triggerNewNoteFlag = useSelector(selectTriggerNewNote);
+
+	useEffect(() => {
+		if (!checkAccess([ROLE.ADMIN, ROLE.USER], user.roleId)) {
+			return;
+		}
+
+		dispatch(thunk('/notes', setNotes, setIsLoadingNotes, setErrorNotes));
+	}, [dispatch, user]);
 
 	const handleSetFlagNewNoteButton = useCallback((boolValue) => setFlagNewNoteButton(boolValue), []);
 
@@ -67,7 +82,6 @@ export const NotesPage = () => {
 			handleNewNote();
 			dispatch(setTriggerNewNote(false));
 		}
-		setIsLocalLoading(false);
 	}, [dispatch, triggerNewNoteFlag]);
 
 	if (isLocalLoading) {
@@ -75,7 +89,7 @@ export const NotesPage = () => {
 	}
 
 	return (
-		<ErrorContent access={[ROLE.ADMIN, ROLE.USER]} error={null}>
+		<ErrorContent access={[ROLE.ADMIN, ROLE.USER]} error={errorMessage}>
 			<div className={styles.NotesPage}>
 				<div className={styles.notesList}>
 					<Search onChange={onSearch} />

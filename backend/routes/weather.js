@@ -5,6 +5,7 @@ const router = express.Router({ mergeParams: true });
 router.get("/", async (req, res) => {
   try {
     const city = req.query.city || "Moscow";
+
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&lang=ru&appid=${process.env.WEATHER_API_KEY}`;
 
     const response = await fetch(apiUrl);

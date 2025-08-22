@@ -1,66 +1,74 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserRow } from './components';
 import { PAGINATION_LIMIT, ROLE } from '../../../../constans';
-import { H2 } from '../../../../components/markup-components';
+import { Button, H2 } from '../../../../components/markup-components';
 import { ErrorContent, Loader, Pagination, Search } from '../../../../components';
-import { checkAccess, confirmed, debounce, request } from '../../../../utils';
-import { selectUser } from '../../../../redux/selectors';
+import { checkAccess, confirmed, debounce } from '../../../../utils';
+import {
+	selectAllUsers,
+	selectErrorUsers,
+	selectIsLoadingUsers,
+	selectUser,
+	selectUsersRole,
+} from '../../../../redux/selectors';
+import {
+	setErrorUsers,
+	setIsLoadingUsers,
+	setAllUsers,
+	setUsersRole,
+	thunk,
+	removeUser,
+} from '../../../../redux/actions';
 import styles from './UsersPageInfo.module.css';
 
 export const UsersPageInfo = () => {
-	const [roles, setRoles] = useState([]);
-	const [users, setUsers] = useState([]);
-	const [shouldUpdateUserList, setShouldUpdateUserList] = useState(false);
-	const [errorMessage, setErrorMessage] = useState(null);
-
-	const [isLocalLoading, setIsLocalLoading] = useState(true);
-
 	const [searchPhrase, setSearchPhrase] = useState('');
 	const [shouldSearch, setShouldSearch] = useState(false);
-
 	const [page, setPage] = useState(1);
-	const [lastPage, setLastPage] = useState(1);
+
+	const [sortOrder, setSortOrder] = useState('asc');
+
+	const dispatch = useDispatch();
 
 	const user = useSelector(selectUser);
+	const { lastPage, users } = useSelector(selectAllUsers);
+	const usersRole = useSelector(selectUsersRole);
+	const isLocalLoading = useSelector(selectIsLoadingUsers);
+	const errorMessage = useSelector(selectErrorUsers);
 
 	const handleSetPage = (data) => setPage(data);
+
+	const fetchAllUsers = () => {
+		dispatch(
+			thunk(
+				`/users?search=${searchPhrase}&page=${page}&limit=${PAGINATION_LIMIT}&sortOrder=${sortOrder}`,
+				setAllUsers,
+				setIsLoadingUsers,
+				setErrorUsers,
+			),
+		);
+	};
 
 	useEffect(() => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
 			return;
 		}
 
-		Promise.all([
-			request(`/users/roles`),
-			request(`/users?search=${searchPhrase}&page=${page}&limit=${PAGINATION_LIMIT}`),
-		]).then(([{ error: errorRole, data: roles }, responseUsers]) => {
-			const { error: errorUsers, data } = responseUsers || {};
+		Promise.all([dispatch(thunk(`/users/roles`, setUsersRole, setIsLoadingUsers, setErrorUsers)), fetchAllUsers()]);
+	}, [dispatch, page, user, shouldSearch, sortOrder]);
 
-			const safeUsers = data?.users || [];
-			const safeLastPage = data?.lastPage || 1;
-
-			setUsers(safeUsers);
-			setRoles(roles);
-			setErrorMessage(errorRole || errorUsers);
-			setLastPage(safeLastPage);
-			setIsLocalLoading(false);
-		});
-	}, [shouldUpdateUserList, page, user.roleId, shouldSearch]);
-
-	const onUserRemove = (userId, userLogin) => {
+	const onUserRemove = async (userId, userLogin) => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
 			return;
 		}
 		if (confirmed(`user: ${userLogin}`)) {
-			request(`/users/${userId}`, 'DELETE').then(() => {
-				setShouldUpdateUserList(!shouldUpdateUserList);
-			});
-			const updatedUsers = users.filter((note) => note.id !== userId);
+			await dispatch(removeUser(userId));
 
-			if (updatedUsers.length === 0 && page > 1) {
+			if (users.length === 0 && page > 1) {
 				setPage(page - 1);
-				return;
+			} else {
+				fetchAllUsers();
 			}
 		}
 	};
@@ -70,6 +78,10 @@ export const UsersPageInfo = () => {
 	const onSearch = ({ target }) => {
 		setSearchPhrase(target.value);
 		startDelayedSearch(!shouldSearch);
+	};
+
+	const handleSortByLogin = () => {
+		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
 
 	if (isLocalLoading) {
@@ -87,7 +99,9 @@ export const UsersPageInfo = () => {
 					<div>
 						<div className={styles.table}>
 							<div className={styles.tableHeader}>
-								<div className={styles.loginColumn}>Login</div>
+								<div className={styles.loginColumn}>
+									<Button onClick={handleSortByLogin}>Login {sortOrder === 'asc' ? '↑' : '↓'}</Button>
+								</div>
 								<div className={styles.regAtColumn}>Registration date</div>
 								<div className={styles.roleColumn}>Role</div>
 							</div>
@@ -95,7 +109,7 @@ export const UsersPageInfo = () => {
 								<UserRow
 									key={user.id}
 									user={user}
-									roles={roles.filter((role) => role.id !== ROLE.GUEST)}
+									roles={usersRole.filter((role) => role.id !== ROLE.GUEST)}
 									onUserRemove={onUserRemove}
 								/>
 							))}

@@ -1,15 +1,13 @@
 import { Link, Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { authFormSchema } from './components';
 import { Button, H2, Input } from '../../components/markup-components';
-import { setUser } from '../../redux/actions';
-import { selectUser } from '../../redux/selectors';
+import { setErrorUser, setIsLoadingUser, setUser, thunkAuth } from '../../redux/actions';
+import { selectErrorUser, selectIsLoadingUser, selectUser } from '../../redux/selectors';
 import { ROLE } from '../../constans';
 import { useResetForm } from '../../hooks';
-import { request } from '../../utils';
 import { Loader } from '../../components';
 import styles from './Authorization.module.css';
 
@@ -24,37 +22,19 @@ export const Authorization = () => {
 		resolver: yupResolver(authFormSchema),
 	});
 
-	const [serverError, setServerError] = useState(null);
-	const [isLocalLoading, setIsLocalLoading] = useState(false);
-
 	const dispatch = useDispatch();
-
+	const isLocalLoading = useSelector(selectIsLoadingUser);
+	const serverError = useSelector(selectErrorUser);
 	const user = useSelector(selectUser);
 
 	useResetForm(reset);
 
 	const onSubmit = async ({ login, password }) => {
-		setIsLocalLoading(true);
-		try {
-			await request('/login', 'POST', { login, password }).then(({ error, user }) => {
-				if (error) {
-					setServerError(`Request Error: ${error}`);
-
-					return;
-				}
-
-				dispatch(setUser(user));
-				sessionStorage.setItem('userData', JSON.stringify(user));
-			});
-		} catch (e) {
-			setServerError(`Error connect: ${e.message || 'Unknown error'}`);
-		} finally {
-			setIsLocalLoading(false);
-		}
+		dispatch(thunkAuth(`/login`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message;
-	const errorMessage = formError || serverError;
+	const error = formError || serverError;
 
 	if (isLocalLoading) {
 		return <Loader />;
@@ -71,13 +51,13 @@ export const Authorization = () => {
 				<Input
 					type={'text'}
 					placeholder={'Login...'}
-					{...register('login', { onChange: () => setServerError(null) })}
+					{...register('login', { onChange: () => dispatch(setErrorUser(null)) })}
 					style={{ width: '60%', margin: ' 0 auto 10px' }}
 				/>
 				<Input
 					type="password"
 					placeholder="Password..."
-					{...register('password', { onChange: () => setServerError(null) })}
+					{...register('password', { onChange: () => dispatch(setErrorUser(null)) })}
 					style={{ width: '60%', margin: ' 0 auto 10px' }}
 				/>
 				<Button type="submit" disabled={!!formError} style={{ width: '60%' }}>
@@ -87,7 +67,7 @@ export const Authorization = () => {
 			<Link to="/register" className={styles.link}>
 				Registration
 			</Link>
-			{errorMessage && <div className={styles.error}>{errorMessage}</div>}
+			{error && <div className={styles.error}>{error}</div>}
 		</div>
 	);
 };

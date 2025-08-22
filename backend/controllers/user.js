@@ -34,21 +34,19 @@ async function login(login, password) {
   return { token, user };
 }
 
-async function getUsers(search = "", limit = 10, page = 1) {
+async function getUsers(search = "", limit = 10, page = 1, sortOrder = "asc") {
+  const order = sortOrder === "asc" ? 1 : -1;
+
   const [users, count] = await Promise.all([
     User.find({ login: { $regex: search, $options: "i" } })
-      .limit(limit)
-      .skip((page - 1) * limit)
-      .sort({ createdAt: -1 }),
+      .limit(Number(limit))
+      .skip((Number(page) - 1) * Number(limit))
+      .sort({ login: order }),
     User.countDocuments({ login: { $regex: search, $options: "i" } }),
   ]);
 
-  if (!users || !count) {
-    throw new Error("Error load data");
-  }
-
   return {
-    users: users,
+    users,
     lastPage: Math.ceil(count / limit),
   };
 }

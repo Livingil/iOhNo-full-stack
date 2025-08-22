@@ -3,7 +3,8 @@ import { IconSky } from './IconSky';
 import styles from './Sky.module.css';
 
 export const Sky = ({ weather, weatherSky }) => {
-	const newWeather = weather.charAt(0).toUpperCase() + weather.slice(1);
+	let newWeather;
+	if (weather) newWeather = weather.charAt(0).toUpperCase() + weather.slice(1);
 	return (
 		<div className={styles.Sky}>
 			<div className={styles.text}>{newWeather}</div>

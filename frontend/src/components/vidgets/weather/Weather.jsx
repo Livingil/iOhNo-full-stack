@@ -1,47 +1,39 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { City, Temperature, Sky } from './components';
-import { setWeather } from '../../../redux/actions';
+import { setErrorWeather, setIsLoadingWeather, setWeather, thunk } from '../../../redux/actions';
 import { Loader } from '../../loader/Loader';
-import { request } from '../../../utils';
 import { ErrorContent } from '../../Error-content/Error-content';
+import { selectErrorWeather, selectIsLoadingWeather, selectUser, selectWeather } from '../../../redux/selectors';
 import styles from './Weather.module.css';
 
 export const Weather = () => {
-	const [city, setCiy] = useState('');
-	const [temperature, setTemperature] = useState('');
-	const [weather, setWeath] = useState('');
-	const [weatherSky, setWeatherSky] = useState('');
-	const [isLocalLoading, setIsLocalLoading] = useState(true);
-	const [serverError, setServerError] = useState(null);
-
 	const dispatch = useDispatch();
+	const isLocalLoading = useSelector(selectIsLoadingWeather);
+	const errorMessage = useSelector(selectErrorWeather);
+	const weather = useSelector(selectWeather);
+	const user = useSelector(selectUser);
 
 	useEffect(() => {
-		request('/weather').then(({ error, data }) => {
-			setServerError(error);
-			dispatch(setWeather(data));
-			setCiy(data.name);
-			setTemperature(Math.round(data.main.temp));
-			setWeath(data.weather[0].description);
-			setWeatherSky(data.weather[0].id);
-			setIsLocalLoading(false);
-		});
-	}, [dispatch]);
+		const userCity = user?.city || 'Moscow';
+		console.log(user.city);
+
+		dispatch(thunk(`/weather?city=${userCity}`, setWeather, setIsLoadingWeather, setErrorWeather));
+	}, [dispatch, user]);
 
 	return (
-		<ErrorContent error={serverError}>
+		<ErrorContent error={errorMessage}>
 			<Link to="/weather" className={styles.WeatherContainer}>
 				{isLocalLoading ? (
 					<Loader />
 				) : (
 					<div>
-						<City city={city} />
-						<Temperature temperature={temperature} />
+						<City city={weather.name} />
+						<Temperature temperature={weather.temp} />
 					</div>
 				)}
-				<Sky weather={weather} weatherSky={weatherSky} />
+				<Sky weather={weather.weatherArr?.description} weatherSky={weather.weatherArr?.id} />
 			</Link>
 		</ErrorContent>
 	);

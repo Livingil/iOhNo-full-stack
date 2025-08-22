@@ -9,6 +9,7 @@ const UserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    city: { type: String, required: true, default: "Moscow" },
     image_url: {
       type: String,
       validate: {

@@ -1,11 +1,11 @@
 const express = require("express");
 const {
-  getNotes: getNotes,
-  getNote: getNote,
-  addNote: addNote,
-  editNote: editNote,
-  deleteNote: deleteNote,
-  getNotesForUser: getNotesForUser,
+  getNotes,
+  getNote,
+  addNote,
+  editNote,
+  deleteNote,
+  getNotesForUser,
 } = require("../controllers/note");
 const authenticated = require("../middlewares/authenticated");
 const hasRole = require("../middlewares/hasRole");
@@ -31,10 +31,13 @@ router.get(
 
 router.get("/all", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
   try {
+    const { search, limit, page, sortOrder } = req.query;
+
     const { notes, lastPage } = await getNotes(
-      req.query.search,
-      req.query.limit,
-      req.query.page
+      search,
+      Number(limit),
+      Number(page),
+      sortOrder
     );
 
     res.send({ error: null, data: { lastPage, notes: notes.map(mapNote) } });

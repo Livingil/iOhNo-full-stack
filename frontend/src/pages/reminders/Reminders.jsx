@@ -1,19 +1,31 @@
+import { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { HeaderReminders, ReminderRow } from './components';
-import { selectReminders, selectUser } from '../../redux/selectors';
-import { ErrorContent, Search } from '../../components';
+import { selectErrorReminders, selectIsLoadingReminders, selectReminders, selectUser } from '../../redux/selectors';
+import { ErrorContent, Loader, Search } from '../../components';
 import { Button } from '../../components/markup-components';
 import { ROLE } from '../../constans';
-import { setReminders } from '../../redux/actions';
-import { dateNow } from '../../utils';
+import { setErrorReminders, setIsLoadingReminders, setReminders, thunk } from '../../redux/actions';
+import { checkAccess, dateNow } from '../../utils';
 import styles from './Reminders.module.css';
 
 export const RemindersPage = () => {
+	const dispatch = useDispatch();
+
+	const isLocalLoading = useSelector(selectIsLoadingReminders);
+	const errorMessage = useSelector(selectErrorReminders);
 	const reminders = useSelector(selectReminders);
 	const user = useSelector(selectUser);
 	const location = useLocation();
-	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
+			return;
+		}
+		if (reminders.length === 0)
+			dispatch(thunk('/reminders', setReminders, setIsLoadingReminders, setErrorReminders));
+	}, [dispatch, reminders, user]);
 
 	const handleNewReminder = () => {
 		// dispatch(
@@ -44,10 +56,15 @@ export const RemindersPage = () => {
 		dispatch(setReminders([newReminder, ...reminders]));
 	};
 
+	if (isLocalLoading) {
+		return <Loader />;
+	}
+
 	return (
-		<ErrorContent access={[ROLE.ADMIN]} error={null}>
+		<ErrorContent access={[ROLE.ADMIN]} error={errorMessage}>
 			<div className={styles.RemindersPage}>
 				<HeaderReminders />
+
 				<div className={styles.header}>
 					<Search
 						style={{ padding: 'auto', margin: '0' }}
@@ -56,6 +73,7 @@ export const RemindersPage = () => {
 						placeholderText={'Search for title'}
 					/>
 				</div>
+
 				{location.pathname !== '/reminders/done' ? (
 					<>
 						<div className={styles.tableHeader}>

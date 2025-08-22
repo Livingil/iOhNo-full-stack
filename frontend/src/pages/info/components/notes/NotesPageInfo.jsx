@@ -1,28 +1,60 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ErrorContent, Loader, Pagination, Search } from '../../../../components';
-import { H2 } from '../../../../components/markup-components';
+import { Button, H2 } from '../../../../components/markup-components';
 import { NotesRow } from './components';
 import { PAGINATION_LIMIT, ROLE } from '../../../../constans';
-import { checkAccess, debounce, request } from '../../../../utils';
-import { selectUser } from '../../../../redux/selectors';
+import { checkAccess, debounce } from '../../../../utils';
+import {
+	selectAllNotes,
+	selectErrorNotes,
+	selectErrorUsers,
+	selectIsLoadingNotes,
+	selectIsLoadingUsers,
+	selectUser,
+	selectUsers,
+} from '../../../../redux/selectors';
+import {
+	deleteNoteFromAllNotes,
+	removeNote,
+	setAllNotes,
+	setErrorNotes,
+	setErrorUsers,
+	setIsLoadingUsers,
+	setUsers,
+	thunk,
+} from '../../../../redux/actions';
+import { setIsLoadingNotes } from '../../../../redux/actions/flags/set-is-loading-notes';
 import styles from './NotesPageInfo.module.css';
 
 export const NotesPageInfo = () => {
-	const [notes, setNotes] = useState([]);
-	const [users, setUsers] = useState([]);
-	const [errorMessage, setErrorMessage] = useState(null);
 	const [searchPhrase, setSearchPhrase] = useState('');
 	const [shouldSearch, setShouldSearch] = useState(false);
-
 	const [page, setPage] = useState(1);
-	const [lastPage, setLastPage] = useState(1);
 
-	const [isLocalLoading, setIsLocalLoading] = useState(true);
+	const [sortOrder, setSortOrder] = useState('asc');
+
+	const dispatch = useDispatch();
 
 	const user = useSelector(selectUser);
+	const { lastPage, notes } = useSelector(selectAllNotes);
+	const users = useSelector(selectUsers);
+	const isLocalLoading = useSelector((state) => selectIsLoadingNotes(state) || selectIsLoadingUsers(state));
+	const errorMessage = useSelector((state) => selectErrorNotes(state) || selectErrorUsers(state));
+
+	console.log(users);
 
 	const handleSetPage = (data) => setPage(data);
+
+	const fetchAllNotes = () =>
+		dispatch(
+			thunk(
+				`/notes/all?search=${searchPhrase}&page=${page}&limit=${PAGINATION_LIMIT}&sortOrder=${sortOrder}`,
+				setAllNotes,
+				setIsLoadingNotes,
+				setErrorNotes,
+			),
+		);
 
 	useEffect(() => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
@@ -30,21 +62,10 @@ export const NotesPageInfo = () => {
 		}
 
 		Promise.all([
-			request(`/notes/all?search=${searchPhrase}&page=${page}&limit=${PAGINATION_LIMIT}`),
-			request('/users/forAllNotes'),
-		]).then(([resNotes, { error: errorUsers, data: users }]) => {
-			const { error: errorNotes, data } = resNotes;
-
-			const safeNotes = data?.notes || [];
-			const safeLastPage = data?.lastPage || 1;
-
-			setUsers(users);
-			setNotes(safeNotes);
-			setErrorMessage(errorNotes || errorUsers);
-			setLastPage(safeLastPage);
-			setIsLocalLoading(false);
-		});
-	}, [page, shouldSearch, user.roleId]);
+			fetchAllNotes(),
+			dispatch(thunk(`/users/forAllNotes`, setUsers, setIsLoadingUsers, setErrorUsers)),
+		]);
+	}, [dispatch, page, shouldSearch, user, sortOrder]);
 
 	const startDelayedSearch = useMemo(() => debounce(setShouldSearch, 2000), []);
 
@@ -54,32 +75,17 @@ export const NotesPageInfo = () => {
 	};
 
 	const handleNoteDelete = async (deletedNoteId) => {
-		setIsLocalLoading(true);
-		try {
-			const updatedNotes = notes.filter((note) => note.id !== deletedNoteId);
+		await dispatch(removeNote(deletedNoteId, deleteNoteFromAllNotes));
 
-			if (updatedNotes.length === 0 && page > 1) {
-				setPage(page - 1);
-				return;
-			}
-
-			if (updatedNotes.length < PAGINATION_LIMIT && page < lastPage) {
-				const nextPage = page + 1;
-
-				const { data } = await request(
-					`/notes/all?search=${searchPhrase}&page=${nextPage}&limit=${PAGINATION_LIMIT}`,
-				);
-
-				const remainingSlots = PAGINATION_LIMIT - updatedNotes.length;
-				const notesToAdd = data.notes.slice(0, remainingSlots);
-
-				setNotes([...updatedNotes, ...notesToAdd]);
-			} else {
-				setNotes(updatedNotes);
-			}
-		} finally {
-			setIsLocalLoading(false);
+		if (notes.length === 1 && page > 1) {
+			setPage(page - 1);
+		} else {
+			fetchAllNotes();
 		}
+	};
+
+	const handleSortByDate = () => {
+		setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
 	};
 
 	if (isLocalLoading) {
@@ -105,7 +111,11 @@ export const NotesPageInfo = () => {
 							<div className={styles.tableHeader}>
 								<div className={styles.loginColumn}>Login author</div>
 								<div className={styles.titleColumn}>Title</div>
-								<div className={styles.pubAtColumn}>Publication date</div>
+								<div className={styles.pubAtColumn}>
+									<Button onClick={handleSortByDate}>
+										Publication date {sortOrder === 'asc' ? '↑' : '↓'}
+									</Button>
+								</div>
 							</div>
 							{notes?.map((note) => (
 								<NotesRow key={note.id} note={note} users={users} handleNoteDelete={handleNoteDelete} />

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Icon, Loader, ErrorContent } from '../../../../../../components';
-import { loadNote, removeNote, saveNote } from '../../../../../../redux/actions';
+import { deleteNoteFromAllNotes, loadNote, removeNote, saveNote } from '../../../../../../redux/actions';
 import { selectNote, selectUser } from '../../../../../../redux/selectors';
 import { Textarea } from '../../../../../../components/markup-components';
 import { ROLE } from '../../../../../../constans';
@@ -51,7 +51,7 @@ export const NotePageInfo = () => {
 
 	const onNoteRemove = () => {
 		if (confirmed('note')) {
-			dispatch(removeNote(note.id)).then(() => navigate(-1));
+			dispatch(removeNote(note.id, deleteNoteFromAllNotes)).then(() => navigate(-1));
 		}
 		return;
 	};

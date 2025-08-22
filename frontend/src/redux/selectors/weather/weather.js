@@ -1,1 +1,1 @@
-export const selectWeather = (state) => state.weather.weather;
+export const selectWeather = (state) => state.weather;

@@ -1,18 +1,13 @@
 import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Icon } from '../../../../../../components';
-import { removeNote } from '../../../../../../redux/actions';
 import { confirmed, formatDate } from '../../../../../../utils';
 import { PROP_TYPE } from '../../../../../../constans';
 import styles from './Note-row.module.css';
 
 export const NotesRow = ({ note, users, handleNoteDelete }) => {
-	const dispatch = useDispatch();
-
 	const onNoteRemove = () => {
 		if (confirmed('note')) {
-			dispatch(removeNote(note.id));
 			handleNoteDelete(note.id);
 		}
 		return;

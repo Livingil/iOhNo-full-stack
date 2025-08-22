@@ -14,6 +14,9 @@ export const reducerNote = (state = initialStateNote, action) => {
 		case ACTION_TYPE.DELETE_NOTE: {
 			return initialStateNote;
 		}
+		case ACTION_TYPE.DELETE_NOTE_FROM_ALL_NOTES: {
+			return initialStateNote;
+		}
 
 		default:
 			return state;

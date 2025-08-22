@@ -1,15 +1,14 @@
 import { Navigate } from 'react-router-dom';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { regFormSchema } from './components';
 import { Button, H2, Input } from '../../components/markup-components';
-import { setUser } from '../../redux/actions';
-import { selectUser } from '../../redux/selectors';
+import { setErrorUser, setIsLoadingUser, setUser, thunkAuth } from '../../redux/actions';
+import { selectErrorUser, selectIsLoadingUser, selectUser } from '../../redux/selectors';
 import { ROLE } from '../../constans';
 import { useResetForm } from '../../hooks';
-import { request } from '../../utils';
+import { Loader } from '../../components';
 import styles from './Registration.module.css';
 
 export const Registration = () => {
@@ -23,28 +22,23 @@ export const Registration = () => {
 		resolver: yupResolver(regFormSchema),
 	});
 
-	const [serverError, setServerError] = useState(null);
-
 	const dispatch = useDispatch();
-
+	const isLocalLoading = useSelector(selectIsLoadingUser);
+	const serverError = useSelector(selectErrorUser);
 	const user = useSelector(selectUser);
 
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }) => {
-		request('/register', 'POST', { login, password }).then(({ error, user }) => {
-			if (error) {
-				setServerError(`Request Error: ${error}`);
-				return;
-			}
-
-			dispatch(setUser(user));
-			sessionStorage.setItem('userData', JSON.stringify(user));
-		});
+		dispatch(thunkAuth(`/register`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message || errors?.passcheck?.message;
 	const errorMessage = formError || serverError;
+
+	if (isLocalLoading) {
+		return <Loader />;
+	}
 
 	if (user.roleId !== ROLE.GUEST) {
 		return <Navigate to="/" />;
@@ -57,19 +51,19 @@ export const Registration = () => {
 				<Input
 					type={'text'}
 					placeholder={'Login...'}
-					{...register('login', { onChange: () => setServerError(null) })}
+					{...register('login', { onChange: () => dispatch(setErrorUser(null)) })}
 					style={{ width: '60%', margin: ' 0 auto 10px' }}
 				/>
 				<Input
 					type="password"
 					placeholder="Password..."
-					{...register('password', { onChange: () => setServerError(null) })}
+					{...register('password', { onChange: () => dispatch(setErrorUser(null)) })}
 					style={{ width: '60%', margin: ' 0 auto 10px' }}
 				/>
 				<Input
 					type="password"
 					placeholder="Repeat password..."
-					{...register('passcheck', { onChange: () => setServerError(null) })}
+					{...register('passcheck', { onChange: () => dispatch(setErrorUser(null)) })}
 					style={{ width: '60%', margin: ' 0 auto 10px' }}
 				/>
 				<Button type="submit" disabled={!!formError} style={{ width: '60%' }}>
