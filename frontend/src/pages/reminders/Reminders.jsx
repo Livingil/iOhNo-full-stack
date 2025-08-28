@@ -38,7 +38,6 @@ export const RemindersPage = () => {
 
 		dispatch(setReminders([newReminder, ...reminders]));
 	};
-	console.log(isLocalLoading);
 
 	if (isLocalLoading) {
 		return <Loader />;
