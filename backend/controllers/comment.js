@@ -1,7 +1,6 @@
 const Comment = require("../models/Comment");
 const User = require("../models/User");
 
-// add
 async function addComment(userId, comment) {
   const newComment = await Comment.create(comment);
 
@@ -11,8 +10,6 @@ async function addComment(userId, comment) {
 
   return newComment;
 }
-
-// delete
 
 async function deleteComment(userId, commentId) {
   await Comment.deleteOne({ _id: commentId });

@@ -17,7 +17,6 @@ export const Weather = () => {
 
 	useEffect(() => {
 		const userCity = user?.city || 'Moscow';
-		console.log(user.city);
 
 		dispatch(thunk(`/weather?city=${userCity}`, setWeather, setIsLoadingWeather, setErrorWeather));
 	}, [dispatch, user]);

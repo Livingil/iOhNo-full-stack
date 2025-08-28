@@ -8,9 +8,6 @@ export const thunkPost = (url, setterData, setterIsloading, setterError, { ...pr
 
 		request(url, 'POST', props)
 			.then(({ error, data }) => {
-				console.log('error', error);
-				console.log('user', data);
-
 				if (error) {
 					dispatch(setterError(error));
 					dispatch(setterIsloading(false));

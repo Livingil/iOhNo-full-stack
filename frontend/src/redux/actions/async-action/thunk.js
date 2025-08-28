@@ -8,9 +8,6 @@ export const thunk = (url, setterData, setterIsloading, setterError) => {
 
 		request(url)
 			.then(({ error, data }) => {
-				console.log('data', data);
-				console.log('error', error);
-
 				if (error) {
 					dispatch(setterError(error));
 					dispatch(setterIsloading(false));

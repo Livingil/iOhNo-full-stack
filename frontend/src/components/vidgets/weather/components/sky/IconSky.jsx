@@ -77,7 +77,8 @@ export const IconSky = ({ weatherSky }) => {
 			sky = '04d';
 			break;
 
-		default: //null
+		default:
+			null;
 	}
 	return (
 		<img src={`https://openweathermap.org/img/wn/${sky}@2x.png`} alt="Состояние неба" style={{ width: '80px' }} />

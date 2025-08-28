@@ -23,28 +23,11 @@ export const RemindersPage = () => {
 		if (!checkAccess([ROLE.ADMIN], user.roleId)) {
 			return;
 		}
-		if (reminders.length === 0)
-			dispatch(thunk('/reminders', setReminders, setIsLoadingReminders, setErrorReminders));
-	}, [dispatch, reminders, user]);
+
+		dispatch(thunk('/reminders', setReminders, setIsLoadingReminders, setErrorReminders));
+	}, [dispatch, user]);
 
 	const handleNewReminder = () => {
-		// dispatch(
-		// 	setNote({
-		// 		id: null,
-		// 		title: null,
-		// 		content: null,
-		// 		creationAt: null,
-		// 		timeCreationAt: null,
-		// 		authorId: null,
-		// 	}),
-		// );
-
-		// setFlagNewNoteButton(false);
-
-		// if (notes[0]?.title === 'New note' && notes[0]?.content === 'New note') {
-		// 	return;
-		// }
-
 		const newReminder = {
 			id: Date.now(),
 			title: 'New reminder',
@@ -55,6 +38,7 @@ export const RemindersPage = () => {
 
 		dispatch(setReminders([newReminder, ...reminders]));
 	};
+	console.log(isLocalLoading);
 
 	if (isLocalLoading) {
 		return <Loader />;
@@ -66,12 +50,7 @@ export const RemindersPage = () => {
 				<HeaderReminders />
 
 				<div className={styles.header}>
-					<Search
-						style={{ padding: 'auto', margin: '0' }}
-						// searchPhrase={searchPhrase}
-						// onChange={onSearch}
-						placeholderText={'Search for title'}
-					/>
+					<Search style={{ padding: 'auto', margin: '0' }} placeholderText={'Search for title'} />
 				</div>
 
 				{location.pathname !== '/reminders/done' ? (

@@ -8,9 +8,7 @@ export const reducerReminders = (state = initialStateReminders, action) => {
 		case ACTION_TYPE.SET_REMINDERS: {
 			return { ...state, reminders: payload };
 		}
-		// case ACTION_TYPE.DELETE_NOTE: {
-		// 	return { ...state, notes: state.notes.filter((note) => note.id !== payload) };
-		// }
+
 		case ACTION_TYPE.LOGOUT: {
 			return initialStateReminders;
 		}

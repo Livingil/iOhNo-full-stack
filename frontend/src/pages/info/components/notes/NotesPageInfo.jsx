@@ -42,8 +42,6 @@ export const NotesPageInfo = () => {
 	const isLocalLoading = useSelector((state) => selectIsLoadingNotes(state) || selectIsLoadingUsers(state));
 	const errorMessage = useSelector((state) => selectErrorNotes(state) || selectErrorUsers(state));
 
-	console.log(users);
-
 	const handleSetPage = (data) => setPage(data);
 
 	const fetchAllNotes = () =>

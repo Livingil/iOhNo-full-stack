@@ -1,7 +1,5 @@
 const express = require("express");
 const {
-  // getNotes: getNotes,
-  // getNote: getNote,
   addReminder: addReminder,
   editNote: editNote,
   deleteNote: deleteNote,
@@ -28,30 +26,6 @@ router.get(
     }
   }
 );
-
-// router.get("/all", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-//   try {
-//     const { notes, lastPage } = await getNotes(
-//       req.query.search,
-//       req.query.limit,
-//       req.query.page
-//     );
-
-//     res.send({ error: null, data: { lastPage, notes: notes.map(mapNote) } });
-//   } catch (e) {
-//     res.send({ error: e.message || "Unknown error" });
-//   }
-// });
-
-// router.get("/:id", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-//   try {
-//     const note = await getNote(req.params.id);
-
-//     res.send({ error: null, data: mapNote(note) });
-//   } catch (e) {
-//     res.send({ error: e.message || "Unknown error" });
-//   }
-// });
 
 router.post(
   "/",
