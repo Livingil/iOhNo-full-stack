@@ -23,6 +23,7 @@ import {
 	selectAllNotes,
 } from '../../../../../../redux/selectors';
 import styles from './UserPageInfo.module.css';
+import { Comments } from './components';
 
 export const UserPageInfo = () => {
 	const params = useParams();
@@ -89,6 +90,7 @@ export const UserPageInfo = () => {
 					)}
 				</div>
 			</div>
+			<Comments />
 		</ErrorContent>
 	);
 };

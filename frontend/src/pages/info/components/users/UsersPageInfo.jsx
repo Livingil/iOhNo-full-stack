@@ -7,6 +7,7 @@ import { ErrorContent, Loader, Pagination, Search } from '../../../../components
 import { checkAccess, confirmed, debounce } from '../../../../utils';
 import {
 	selectAllUsers,
+	selectErrorUser,
 	selectErrorUsers,
 	selectIsLoadingUsers,
 	selectUser,

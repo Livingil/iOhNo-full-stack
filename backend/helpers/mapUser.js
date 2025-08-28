@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const mapComment = require("./mapComment");
+
 module.exports = function (user) {
   return {
     id: user.id,
@@ -7,5 +10,8 @@ module.exports = function (user) {
     roleId: user.role_id,
     registeredAt: user.createdAt,
     updatedAt: user.updatedAt,
+    comments: user.comments?.map((comment) =>
+      mongoose.isObjectIdOrHexString(comment) ? comment : mapComment(comment)
+    ),
   };
 };

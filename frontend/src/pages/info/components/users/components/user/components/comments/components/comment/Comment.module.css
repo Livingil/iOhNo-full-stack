@@ -1,0 +1,78 @@
+.CommentRow {
+	display: flex;
+}
+
+.Comment {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 80%;
+	margin: 10px 10px;
+	padding: 10px 15px;
+	backdrop-filter: blur(10px);
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.comment {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin-right: 10px;
+}
+
+.informationPanel {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+.author {
+	display: flex;
+	align-items: center;
+	font-size: 0.9rem;
+	color: #eee;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.author .Icon {
+	margin-right: 8px;
+	font-size: 1.2rem;
+	color: #fff;
+	opacity: 0.7;
+}
+
+.publishedAt {
+	display: flex;
+	align-items: center;
+	font-size: 0.75rem;
+	color: #bbb;
+}
+
+.publishedAt .Icon {
+	margin-right: 5px;
+	font-size: 1rem;
+	color: #ccc;
+	opacity: 0.6;
+}
+
+.commentText {
+	font-size: 0.9rem;
+	color: #ddd;
+	overflow: hidden;
+}
+
+.button {
+	margin: auto 10px;
+	cursor: pointer;
+}
+
+.button:hover {
+	color: #007bff;
+}

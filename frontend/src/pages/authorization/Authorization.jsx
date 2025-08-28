@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { authFormSchema } from './components';
 import { Button, H2, Input } from '../../components/markup-components';
-import { setErrorUser, setIsLoadingUser, setUser, thunkAuth } from '../../redux/actions';
+import { setErrorUser, setIsLoadingUser, setUser, thunkPost } from '../../redux/actions';
 import { selectErrorUser, selectIsLoadingUser, selectUser } from '../../redux/selectors';
 import { ROLE } from '../../constans';
 import { useResetForm } from '../../hooks';
@@ -30,7 +30,7 @@ export const Authorization = () => {
 	useResetForm(reset);
 
 	const onSubmit = async ({ login, password }) => {
-		dispatch(thunkAuth(`/login`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
+		dispatch(thunkPost(`/login`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message;

@@ -14,6 +14,7 @@ export const IOhNo = () => {
 		if (!currentUserDataJSON) {
 			return;
 		}
+		console.log('home', JSON.parse(currentUserDataJSON));
 
 		const currentUserData = JSON.parse(currentUserDataJSON);
 

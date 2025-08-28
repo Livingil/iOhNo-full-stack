@@ -11,6 +11,8 @@ const hasRole = require("../middlewares/hasRole");
 const authenticated = require("../middlewares/authenticated");
 const mapUser = require("../helpers/mapUser");
 const ROLES = require("../constants/roles");
+const { addComment, deleteComment } = require("../controllers/comment");
+const mapComment = require("../helpers/mapComment");
 
 const router = express.Router({ mergeParams: true });
 
@@ -64,6 +66,39 @@ router.get("/:id", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
     res.send({ error: e.message || "Unknown error" });
   }
 });
+
+router.post(
+  "/:id/comments",
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    try {
+      const newComment = await addComment(req.params.id, {
+        content: req.body.content,
+        author: req.user.id,
+      });
+
+      res.send({ error: null, data: mapComment(newComment) });
+    } catch (e) {
+      res.send({ error: e.message || "Unknown error" });
+    }
+  }
+);
+
+router.delete(
+  "/:userId/comments/:commentId",
+  authenticated,
+  hasRole([ROLES.ADMIN]),
+  async (req, res) => {
+    try {
+      await deleteComment(req.params.userId, req.params.commentId);
+
+      res.send({ error: null });
+    } catch (e) {
+      res.send({ error: e.message || "Unknown error" });
+    }
+  }
+);
 
 router.patch(
   "/:id",

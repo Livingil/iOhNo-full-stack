@@ -1,17 +1,22 @@
 import { request } from '../../../utils';
+import { setErrorReset } from '../error/error-reset';
 
-export const thunkAuth = (url, setterData, setterIsloading, setterError, { ...props }) => {
+export const thunkPost = (url, setterData, setterIsloading, setterError, { ...props }) => {
 	return (dispatch) => {
 		dispatch(setterIsloading(true));
+		dispatch(setErrorReset());
 
 		request(url, 'POST', props)
-			.then(({ error, user }) => {
+			.then(({ error, data }) => {
+				console.log('error', error);
+				console.log('user', data);
+
 				if (error) {
 					dispatch(setterError(error));
 					dispatch(setterIsloading(false));
 				} else {
-					dispatch(setterData(user));
-					sessionStorage.setItem('userData', JSON.stringify(user));
+					dispatch(setterData(data));
+					sessionStorage.setItem('userData', JSON.stringify(data));
 					dispatch(setterIsloading(false));
 					dispatch(setterError(error));
 				}

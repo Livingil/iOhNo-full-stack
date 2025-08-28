@@ -27,6 +27,12 @@ const UserSchema = mongoose.Schema(
       type: String,
       default: roles.USER,
     },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment",
+      },
+    ],
   },
   { timestamps: true }
 );

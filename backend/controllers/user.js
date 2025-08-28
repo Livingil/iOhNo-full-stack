@@ -59,7 +59,7 @@ function getUser(id) {
   if (!id) {
     throw new Error("Error load data");
   }
-  return User.findById(id);
+  return User.findById(id).populate({ path: "comments", populate: "author" });
 }
 
 function getRoles() {

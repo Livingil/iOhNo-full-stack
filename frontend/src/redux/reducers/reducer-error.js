@@ -20,6 +20,9 @@ export const reducerError = (state = initialStateError, action) => {
 		case ACTION_TYPE.SET_ERROR_USER: {
 			return { ...state, errorUser: payload };
 		}
+		case ACTION_TYPE.SET_ERROR_RESET: {
+			return { state: initialStateError };
+		}
 
 		default:
 			return state;

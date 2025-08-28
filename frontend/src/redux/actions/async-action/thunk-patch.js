@@ -1,8 +1,10 @@
 import { request } from '../../../utils';
+import { setErrorReset } from '../error/error-reset';
 
 export const thunkPatch = (url, setterData, setterIsloading, setterError, { ...props }) => {
 	return (dispatch) => {
 		dispatch(setterIsloading(true));
+		dispatch(setErrorReset());
 
 		request(url, 'PATCH', props)
 			.then(({ error, data }) => {

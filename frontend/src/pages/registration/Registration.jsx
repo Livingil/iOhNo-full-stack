@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { regFormSchema } from './components';
 import { Button, H2, Input } from '../../components/markup-components';
-import { setErrorUser, setIsLoadingUser, setUser, thunkAuth } from '../../redux/actions';
+import { setErrorUser, setIsLoadingUser, setUser, thunkPost } from '../../redux/actions';
 import { selectErrorUser, selectIsLoadingUser, selectUser } from '../../redux/selectors';
 import { ROLE } from '../../constans';
 import { useResetForm } from '../../hooks';
@@ -30,7 +30,7 @@ export const Registration = () => {
 	useResetForm(reset);
 
 	const onSubmit = ({ login, password }) => {
-		dispatch(thunkAuth(`/register`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
+		dispatch(thunkPost(`/register`, setUser, setIsLoadingUser, setErrorUser, { login, password }));
 	};
 
 	const formError = errors?.login?.message || errors?.password?.message || errors?.passcheck?.message;
